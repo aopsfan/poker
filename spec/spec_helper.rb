@@ -17,3 +17,4 @@ RSpec.configure do |config|
 end
 
 require_relative "../lib/model/card.rb"
+require_relative "../lib/model/hand.rb"

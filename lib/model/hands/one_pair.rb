@@ -17,7 +17,7 @@ class OnePair < Hand
   end
   
   def to_s
-    "Pair of #{@pair.first.capitalized_rank}s"
+    "Pair of #{@pair.first.capitalized_rank.pluralize}"
   end
   
   def compare_same_rank(one_pair)

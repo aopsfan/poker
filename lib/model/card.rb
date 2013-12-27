@@ -42,3 +42,9 @@ class Card
     SUITS[suit]
   end
 end
+
+class String
+  def pluralize
+    self[self.size - 1] == 'x' ? self + "es" : self + "s"
+  end
+end

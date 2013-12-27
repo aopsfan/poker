@@ -17,10 +17,10 @@ class HighCard < Hand
   end
   
   def to_s
-    "#{@high.rank.to_s.capitalize} high"
+    "#{@high.capitalized_rank} high"
   end
   
-  def compare_same_rank(hand)
-    @high <=> hand.high
+  def compare_same_rank(high_card)
+    @high <=> high_card.high
   end
 end

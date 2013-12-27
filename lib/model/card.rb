@@ -22,6 +22,10 @@ class Card
     "{Card: rank => :#{@rank}, suit => :#{@suit}}"
   end
   
+  def capitalized_rank
+    @rank.to_s.capitalize
+  end
+  
   protected
     
   def value

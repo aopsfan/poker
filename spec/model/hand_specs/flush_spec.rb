@@ -89,7 +89,7 @@ describe HighCard do
       end
     end
     
-    describe "hand with high card 10H" do
+    describe "hand with high card TH" do
       it "should output 'Ten high'" do
         expect(ten_high.to_s).to eq "Ten high"
       end

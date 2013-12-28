@@ -1,97 +1,180 @@
 require_relative "../../spec_helper.rb"
 
-describe HighCard do
+describe FullHouse do
   
-  let(:queen_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:queen, :clubs)
+  let(:queens_full_of_eights) do
+    hand = FullHouse.new
+    hand.set = [Card.new(:queen, :clubs), Card.new(:queen, :hearts), Card.new(:queen, :diamonds)]
+    hand.pair = [Card.new(:eight, :spades), Card.new(:eight, :diamonds)]
     return hand
   end
   
-  let(:ace_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:ace, :spades)
+  let(:aces_full_of_twos) do
+    hand = FullHouse.new
+    hand.set = [Card.new(:ace, :spades), Card.new(:ace, :diamonds), Card.new(:ace, :hearts)]
+    hand.pair = [Card.new(:two, :clubs), Card.new(:two, :hearts)]
     return hand
   end
   
-  let(:ten_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:ten, :hearts)
+  let(:tens_full_of_queens) do
+    hand = FullHouse.new
+    hand.set = [Card.new(:ten, :hearts), Card.new(:ten, :clubs), Card.new(:ten, :spades)]
+    hand.pair = [Card.new(:queen, :diamonds), Card.new(:queen, :spades)]
     return hand
   end
   
-  let(:queen_high_2) do
-    hand = HighCard.new
-    hand.high = Card.new(:queen, :spades)
+  let(:twos_full_of_eights) do
+    hand = FullHouse.new
+    hand.set = [Card.new(:two, :spades), Card.new(:two, :diamonds), Card.new(:two, :hearts)]
+    hand.pair = [Card.new(:eight, :clubs), Card.new(:eight, :hearts)]
     return hand
   end
   
   describe "#generate" do
     let(:generated_hand) do
-      HighCard.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
-                         Card.new(:four, :clubs), Card.new(:five, :hearts),
-                         Card.new(:ace, :spades)]
+      FullHouse.generate [Card.new(:two, :diamonds), Card.new(:two, :spades),
+                          Card.new(:five, :clubs), Card.new(:five, :hearts),
+                          Card.new(:five, :spades)]
     end
     
-    context "when hand is generated" do
-      describe "high" do
-        subject {generated_hand.high}
+    let(:generated_hand_2) do
+      FullHouse.generate [Card.new(:five, :diamonds), Card.new(:five, :spades),
+                          Card.new(:two, :clubs), Card.new(:two, :hearts),
+                          Card.new(:two, :spades)]
+    end
+    
+    let(:bad_generated_hand) do
+      FullHouse.generate [Card.new(:two, :diamonds), Card.new(:two, :spades),
+                          Card.new(:four, :clubs), Card.new(:five, :hearts),
+                          Card.new(:five, :spades)]
+    end
+    
+    let(:bad_generated_hand_2) do
+      FullHouse.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
+                          Card.new(:four, :clubs), Card.new(:five, :hearts),
+                          Card.new(:six, :spades)]
+    end
+    
+    context "when Fives full of Twos is generated" do
+      describe "set" do
+        subject {generated_hand.set}
         
-        it "should be an ace" do
-          expect(subject.rank).to eq :ace
+        it "should have 3 cards" do
+          expect(subject.length).to eq 3
         end
     
-        it "should be a spade" do
-          expect(subject.suit).to eq :spades
+        it "should be Fives" do
+          expect(subject[0].rank).to eq :five
+          expect(subject[1].rank).to eq :five
+          expect(subject[2].rank).to eq :five
+        end
+      end
+      
+      describe "pair" do
+        subject {generated_hand.pair}
+        
+        it "should have 2 cards" do
+          expect(subject.length).to eq 2
+        end
+        
+        it "should be Twos" do
+          expect(subject[0].rank).to eq :two
+          expect(subject[1].rank).to eq :two
         end
       end
       
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 4 objects" do
-          expect(subject.length).to eq 4
+        it "should be empty" do
+          expect(subject.empty?).to be_true
+        end
+      end
+    end
+    
+    context "when Twos full of Fives is generated" do
+      describe "set" do
+        subject {generated_hand_2.set}
+        
+        it "should have 3 cards" do
+          expect(subject.length).to eq 3
+        end
+    
+        it "should be Twos" do
+          expect(subject[0].rank).to eq :two
+          expect(subject[1].rank).to eq :two
+          expect(subject[2].rank).to eq :two
+        end
+      end
+      
+      describe "pair" do
+        subject {generated_hand_2.pair}
+        
+        it "should have 2 cards" do
+          expect(subject.length).to eq 2
         end
         
-        it "should not have the high" do
-          expect(subject.include? generated_hand.high).to be_false
+        it "should be Fives" do
+          expect(subject[0].rank).to eq :five
+          expect(subject[1].rank).to eq :five
         end
+      end
+      
+      describe "kickers" do
+        subject {generated_hand_2.kickers}
+        
+        it "should be empty" do
+          expect(subject.empty?).to be_true
+        end
+      end
+    end
+    
+    context "when bad hand is generated" do
+      it "should be nil" do
+        expect(bad_generated_hand).to be_nil
+        expect(bad_generated_hand_2).to be_nil
       end
     end
   end
   
   describe "#<=>" do
-    describe "Queen high" do
-      it "should be less than Ace high" do
-        expect(queen_high < ace_high).to be_true
+    describe "Queens full of Eights" do
+      it "should be less than Aces over Twos" do
+        expect(queens_full_of_eights < aces_full_of_twos).to be_true
       end
       
-      it "should be greater than Ten high" do
-        expect(queen_high > ten_high).to be_true
+      it "should be greater than Tens full of queens" do
+        expect(queens_full_of_eights > tens_full_of_queens).to be_true
       end
       
-      it "should be equal to other Queen high" do
-        expect(queen_high == queen_high_2).to be_true
+      it "should be greater than Twos full of Eights" do
+        expect(queens_full_of_eights > twos_full_of_eights).to be_true
       end
     end
   end
   
   describe "#to_s" do
-    describe "hand with high card QC" do
-      it "should output 'Queen high'" do
-        expect(queen_high.to_s).to eq "Queen high"
+    describe "hand with three Qs and pair of 8s" do
+      it "should output 'Queens full of Eights'" do
+        expect(queens_full_of_eights.to_s).to eq "Queens full of Eights"
       end
     end
     
-    describe "hand with high card AS" do
-      it "should output 'Ace high'" do
-        expect(ace_high.to_s).to eq "Ace high"
+    describe "hand with three As and pair of 2s" do
+      it "should output 'Aces full of Twos'" do
+        expect(aces_full_of_twos.to_s).to eq "Aces full of Twos"
       end
     end
     
-    describe "hand with high card TH" do
-      it "should output 'Ten high'" do
-        expect(ten_high.to_s).to eq "Ten high"
+    describe "hand with three 10s and pair of Qs" do
+      it "should output 'Tens full of Queens'" do
+        expect(tens_full_of_queens.to_s).to eq "Tens full of Queens"
+      end
+    end
+    
+    describe "hand with three 2s and pair of 8s" do
+      it "should output 'Twos full of Eights'" do
+        expect(twos_full_of_eights.to_s).to eq "Twos full of Eights"
       end
     end
   end

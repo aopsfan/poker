@@ -57,6 +57,12 @@ describe Straight do
                          Card.new(:ace, :spades)]
     end
     
+    let(:generated_hand_3) do
+      Straight.generate [Card.new(:ten, :diamonds), Card.new(:ace, :spades),
+                         Card.new(:jack, :clubs), Card.new(:queen, :hearts),
+                         Card.new(:king, :spades)]
+    end
+    
     let(:bad_generated_hand) do
       Straight.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
                          Card.new(:four, :clubs), Card.new(:five, :hearts),
@@ -113,7 +119,33 @@ describe Straight do
       end
       
       describe "kickers" do
-        subject {generated_hand.kickers}
+        subject {generated_hand_2.kickers}
+        
+        it "should be empty" do
+          expect(subject.empty?).to be_true
+        end
+      end
+    end
+    
+    context "when Royal straight is generated" do
+      describe "straight cards" do
+        subject {generated_hand_3.straight_cards}
+    
+        it "should have 5 objects" do
+          expect(subject.length).to eq 5
+        end
+        
+        it "should be in sequential order" do
+          expect(subject[0].rank).to eq :ten
+          expect(subject[1].rank).to eq :jack
+          expect(subject[2].rank).to eq :queen
+          expect(subject[3].rank).to eq :king
+          expect(subject[4].rank).to eq :ace
+        end
+      end
+      
+      describe "kickers" do
+        subject {generated_hand_3.kickers}
         
         it "should be empty" do
           expect(subject.empty?).to be_true

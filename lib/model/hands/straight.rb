@@ -25,15 +25,16 @@ class Straight < Hand
   end
   
   def to_s
-    highest_card = @straight_cards.last
-    if highest_card.rank == :ace
-      "Royal straight"
-    else
-      "#{highest_card.capitalized_rank}-high straight"
-    end
+    royal? ? "Royal straight" : "#{@straight_cards.last.capitalized_rank}-high straight"
   end
   
   def compare_same_rank(straight)
     @straight_cards.last <=> straight.straight_cards.last
+  end
+  
+  protected
+  
+  def royal?
+    @straight_cards.last.rank == :ace
   end
 end

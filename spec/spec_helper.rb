@@ -18,9 +18,12 @@ end
 
 require_relative "../lib/model/card.rb"
 
+# Requires for the hand models.  In their corresponding tests, we test behavior
+# of the model against cases with a standard 52-card deck and a 5-card hand.
 require_relative "../lib/model/hand.rb"
 require_relative "../lib/model/hands/high_card.rb"
 require_relative "../lib/model/hands/one_pair.rb"
 require_relative "../lib/model/hands/two_pair.rb"
 require_relative "../lib/model/hands/three_of_a_kind.rb"
 require_relative "../lib/model/hands/full_house.rb"
+require_relative "../lib/model/hands/straight.rb"

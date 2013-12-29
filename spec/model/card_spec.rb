@@ -22,18 +22,20 @@ describe Card do
   end
   
   describe "#<=>" do
-    subject {ten_diamonds}
-    
-    it "should be greater than a two" do
-      should > two_spades
-    end
-    
-    it "should be less than an ace" do
-      should < ace_spades
-    end
-    
-    it "should be equal to another ten" do
-      should == ten_clubs
+    describe "ten of diamonds" do
+      subject {ten_diamonds}
+
+      it "should be greater than a two" do
+        should > two_spades
+      end
+
+      it "should be less than an ace" do
+        should < ace_spades
+      end
+
+      it "should be equal to another ten" do
+        should == ten_clubs
+      end
     end
   end
   
@@ -53,6 +55,50 @@ describe Card do
     describe "ace of spades" do
       it "should output AS" do
         expect(ace_spades.to_s).to match "AS"
+      end
+    end
+  end
+  
+  describe "#value" do
+    describe "two of spades" do
+      it "should have value 0" do
+        expect(two_spades.value).to eq 0
+      end
+    end
+    
+    describe "ten of diamonds" do
+      it "should have value 8" do
+        expect(ten_diamonds.value).to eq 8
+      end
+    end
+    
+    describe "ace of spades" do
+      it "should have value 12" do
+        expect(ace_spades.value).to eq 12
+      end
+    end
+  end
+  
+  describe "#low_card" do
+    context "when low card" do
+      card = Card.new(:ace, :clubs)
+      card.low_card = true
+      subject {card}
+      
+      it "should be less than a two" do
+        should < two_spades
+      end
+
+      it "should be less than an ace" do
+        should < ace_spades
+      end
+
+      it "should be less than a ten" do
+        should < ten_clubs
+      end
+      
+      it "should have value -1" do
+        expect(subject.value).to eq -1
       end
     end
   end

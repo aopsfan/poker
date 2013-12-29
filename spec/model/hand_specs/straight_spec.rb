@@ -1,97 +1,176 @@
 require_relative "../../spec_helper.rb"
 
-describe HighCard do
+describe Straight do
   
-  let(:queen_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:queen, :clubs)
+  let(:queen_high_straight) do
+    hand = Straight.new
+    hand.straight_cards = [Card.new(:eight, :clubs), Card.new(:nine, :hearts),
+                           Card.new(:ten, :spades), Card.new(:jack, :diamonds),
+                           Card.new(:queen, :clubs)]
     return hand
   end
   
-  let(:ace_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:ace, :spades)
+  let(:royal_straight) do
+    hand = Straight.new
+    hand.straight_cards = [Card.new(:ten, :clubs), Card.new(:jack, :hearts),
+                           Card.new(:queen, :spades), Card.new(:king, :diamonds),
+                           Card.new(:ace, :clubs)]
     return hand
   end
   
-  let(:ten_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:ten, :hearts)
+  let(:ten_high_straight) do
+    hand = Straight.new
+    hand.straight_cards = [Card.new(:six, :clubs), Card.new(:seven, :hearts),
+                           Card.new(:eight, :spades), Card.new(:nine, :diamonds),
+                           Card.new(:ten, :clubs)]
     return hand
   end
   
-  let(:queen_high_2) do
-    hand = HighCard.new
-    hand.high = Card.new(:queen, :spades)
+  let(:queen_high_straight_2) do
+    hand = Straight.new
+    hand.straight_cards = [Card.new(:eight, :spades), Card.new(:nine, :diamonds),
+                           Card.new(:ten, :clubs), Card.new(:jack, :hearts),
+                           Card.new(:queen, :spades)]
+    return hand
+  end
+  
+  let(:five_high_straight) do
+    ace = Card.new(:ace, :spades)
+    ace.low_card = true
+    hand = Straight.new
+    hand.straight_cards = [ace, Card.new(:two, :diamonds),
+                           Card.new(:three, :spades), Card.new(:four, :clubs),
+                           Card.new(:five, :hearts)]
     return hand
   end
   
   describe "#generate" do
     let(:generated_hand) do
-      HighCard.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
+      Straight.generate [Card.new(:two, :diamonds), Card.new(:four, :spades),
+                         Card.new(:three, :clubs), Card.new(:five, :hearts),
+                         Card.new(:six, :spades)]
+    end
+    
+    let(:generated_hand_2) do
+      Straight.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
                          Card.new(:four, :clubs), Card.new(:five, :hearts),
                          Card.new(:ace, :spades)]
     end
     
-    context "when hand is generated" do
-      describe "high" do
-        subject {generated_hand.high}
-        
-        it "should be an ace" do
-          expect(subject.rank).to eq :ace
-        end
+    let(:bad_generated_hand) do
+      Straight.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
+                         Card.new(:four, :clubs), Card.new(:five, :hearts),
+                         Card.new(:five, :spades)]
+    end
     
-        it "should be a spade" do
-          expect(subject.suit).to eq :spades
+    let(:bad_generated_hand_2) do
+      Straight.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
+                         Card.new(:queen, :clubs), Card.new(:king, :hearts),
+                         Card.new(:ace, :spades)]
+    end
+    
+    context "when Six-high straight is generated" do
+      describe "straight cards" do
+        subject {generated_hand.straight_cards}
+    
+        it "should have 5 objects" do
+          expect(subject.length).to eq 5
+        end
+        
+        it "should be in sequential order" do
+          expect(subject[0].rank).to eq :two
+          expect(subject[1].rank).to eq :three
+          expect(subject[2].rank).to eq :four
+          expect(subject[3].rank).to eq :five
+          expect(subject[4].rank).to eq :six
         end
       end
       
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 4 objects" do
-          expect(subject.length).to eq 4
+        it "should be empty" do
+          expect(subject.empty?).to be_true
+        end
+      end
+    end
+    
+    context "when Five-high straight is generated" do
+      describe "straight cards" do
+        subject {generated_hand_2.straight_cards}
+    
+        it "should have 5 objects" do
+          expect(subject.length).to eq 5
         end
         
-        it "should not have the high" do
-          expect(subject.include? generated_hand.high).to be_false
+        it "should be in sequential order" do
+          expect(subject[0].rank).to eq :ace
+          expect(subject[1].rank).to eq :two
+          expect(subject[2].rank).to eq :three
+          expect(subject[3].rank).to eq :four
+          expect(subject[4].rank).to eq :five
         end
+      end
+      
+      describe "kickers" do
+        subject {generated_hand.kickers}
+        
+        it "should be empty" do
+          expect(subject.empty?).to be_true
+        end
+      end
+    end
+    
+    context "when bad hand is generated" do
+      it "should be nil" do
+        expect(bad_generated_hand).to be_nil
+        expect(bad_generated_hand_2).to be_nil
       end
     end
   end
   
   describe "#<=>" do
-    describe "Queen high" do
-      it "should be less than Ace high" do
-        expect(queen_high < ace_high).to be_true
+    describe "Queen-high straight" do
+      it "should be less than Royal straight" do
+        expect(queen_high_straight < royal_straight).to be_true
       end
       
-      it "should be greater than Ten high" do
-        expect(queen_high > ten_high).to be_true
+      it "should be greater than Ten-high straight" do
+        expect(queen_high_straight > ten_high_straight).to be_true
       end
       
-      it "should be equal to other Queen high" do
-        expect(queen_high == queen_high_2).to be_true
+      it "should be greater than Five-high straight" do
+        expect(queen_high_straight > five_high_straight).to be_true
+      end
+      
+      it "should be equal to other Queen-high straight" do
+        expect(queen_high_straight == queen_high_straight_2).to be_true
       end
     end
   end
   
   describe "#to_s" do
-    describe "hand with high card QC" do
-      it "should output 'Queen high'" do
-        expect(queen_high.to_s).to eq "Queen high"
+    describe "8-9-10-J-Q hand" do
+      it "should output 'Queen-high straight'" do
+        expect(queen_high_straight.to_s).to eq "Queen-high straight"
       end
     end
     
-    describe "hand with high card AS" do
-      it "should output 'Ace high'" do
-        expect(ace_high.to_s).to eq "Ace high"
+    describe "10-J-Q-K-A hand" do
+      it "should output 'Royal straight'" do
+        expect(royal_straight.to_s).to eq "Royal straight"
       end
     end
     
-    describe "hand with high card TH" do
-      it "should output 'Ten high'" do
-        expect(ten_high.to_s).to eq "Ten high"
+    describe "6-7-8-9-10 hand" do
+      it "should output 'Ten-high straight'" do
+        expect(ten_high_straight.to_s).to eq "Ten-high straight"
+      end
+    end
+    
+    describe "A-2-3-4-5 hand" do
+      it "should output '5-high straight'" do
+        expect(five_high_straight.to_s).to eq "Five-high straight"
       end
     end
   end

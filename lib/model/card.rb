@@ -1,6 +1,6 @@
 class Card
   include Comparable
-  attr_accessor :rank, :suit
+  attr_accessor :rank, :suit, :low_card
   RANKS = [:two, :three, :four, :five, :six, :seven, :eight, :nine, :ten, :jack, :queen, :king, :ace]
   SUITS = {:spades => 'S', :hearts => 'H', :clubs => 'C', :diamonds => 'D'}
   STRING_RANKS = %w[2 3 4 5 6 7 8 9 10 J Q K A]
@@ -11,7 +11,7 @@ class Card
   end
   
   def <=>(card)
-    value <=> card.value
+    @low_card ? -1 : value <=> card.value
   end
   
   def to_s
@@ -26,12 +26,10 @@ class Card
     @rank.to_s.capitalize
   end
   
-  protected
-    
   def value
-    RANKS.index(@rank)
+    @low_card ? -1 : RANKS.index(@rank)
   end
-  
+    
   private
   
   def rank_string

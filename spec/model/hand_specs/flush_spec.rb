@@ -1,97 +1,127 @@
 require_relative "../../spec_helper.rb"
 
-describe HighCard do
+describe Flush do
   
-  let(:queen_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:queen, :clubs)
+  let(:queen_high_flush) do
+    hand = Flush.new
+    hand.flush_cards = [Card.new(:four, :diamonds), Card.new(:six, :diamonds),
+                        Card.new(:eight, :diamonds), Card.new(:ten, :diamonds),
+                        Card.new(:queen, :diamonds)]
     return hand
   end
   
-  let(:ace_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:ace, :spades)
+  let(:ace_high_flush) do
+    hand = Flush.new
+    hand.flush_cards = [Card.new(:ace, :spades), Card.new(:six, :spades),
+                        Card.new(:eight, :spades), Card.new(:ten, :spades),
+                        Card.new(:four, :spades)]
     return hand
   end
   
-  let(:ten_high) do
-    hand = HighCard.new
-    hand.high = Card.new(:ten, :hearts)
+  let(:ten_high_flush) do
+    hand = Flush.new
+    hand.flush_cards = [Card.new(:five, :hearts), Card.new(:six, :hearts),
+                        Card.new(:eight, :hearts), Card.new(:nine, :hearts),
+                        Card.new(:ten, :hearts)]
     return hand
   end
   
-  let(:queen_high_2) do
-    hand = HighCard.new
-    hand.high = Card.new(:queen, :spades)
+  let(:queen_high_flush_2) do
+    hand = Flush.new
+    hand.flush_cards = [Card.new(:five, :clubs), Card.new(:six, :clubs),
+                        Card.new(:eight, :clubs), Card.new(:ten, :clubs),
+                        Card.new(:queen, :clubs)]
+    return hand
+  end
+  
+  let(:queen_high_flush_3) do
+    hand = Flush.new
+    hand.flush_cards = [Card.new(:four, :clubs), Card.new(:six, :clubs),
+                        Card.new(:eight, :clubs), Card.new(:ten, :clubs),
+                        Card.new(:queen, :clubs)]
     return hand
   end
   
   describe "#generate" do
     let(:generated_hand) do
-      HighCard.generate [Card.new(:two, :diamonds), Card.new(:three, :spades),
-                         Card.new(:four, :clubs), Card.new(:five, :hearts),
-                         Card.new(:ace, :spades)]
+      Flush.generate [Card.new(:four, :clubs), Card.new(:three, :clubs),
+                      Card.new(:two, :clubs), Card.new(:five, :clubs),
+                      Card.new(:ace, :clubs)]
     end
     
+    let(:bad_generated_hand) do
+      Flush.generate [Card.new(:two, :spades), Card.new(:three, :clubs),
+                      Card.new(:four, :clubs), Card.new(:five, :clubs),
+                      Card.new(:ace, :clubs)]
+    end    
+    
     context "when hand is generated" do
-      describe "high" do
-        subject {generated_hand.high}
+      describe "flush cards" do
+        subject {generated_hand.flush_cards}
         
-        it "should be an ace" do
-          expect(subject.rank).to eq :ace
+        it "should have 5 objects" do
+          expect(subject.length).to eq 5
         end
     
-        it "should be a spade" do
-          expect(subject.suit).to eq :spades
+        it "should be all clubs" do
+          subject.each do |card|
+            expect(card.suit).to eq :clubs
+          end
         end
       end
       
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 4 objects" do
-          expect(subject.length).to eq 4
+        it "should be empty" do
+          expect(subject.empty?).to be_true
         end
-        
-        it "should not have the high" do
-          expect(subject.include? generated_hand.high).to be_false
-        end
+      end
+    end
+    
+    context "when bad hand is generated" do
+      it "should be nil" do
+        expect(bad_generated_hand).to be_nil
       end
     end
   end
   
   describe "#<=>" do
-    describe "Queen high" do
-      it "should be less than Ace high" do
-        expect(queen_high < ace_high).to be_true
+    describe "Queen-high flush" do
+      it "should be less than Ace-high flush" do
+        expect(queen_high_flush < ace_high_flush).to be_true
       end
       
-      it "should be greater than Ten high" do
-        expect(queen_high > ten_high).to be_true
+      it "should be greater than Ten-high flush" do
+        expect(queen_high_flush > ten_high_flush).to be_true
       end
       
-      it "should be equal to other Queen high" do
-        expect(queen_high == queen_high_2).to be_true
+      it "should be less than Queen-high flush ending in five" do
+        expect(queen_high_flush < queen_high_flush_2).to be_true
+      end
+      
+      it "should be equal to other Queen-high flush" do
+        expect(queen_high_flush == queen_high_flush_3).to be_true
       end
     end
   end
   
   describe "#to_s" do
-    describe "hand with high card QC" do
-      it "should output 'Queen high'" do
-        expect(queen_high.to_s).to eq "Queen high"
+    describe "all-diamonds hand with high card QD" do
+      it "should output 'Queen-high flush'" do
+        expect(queen_high_flush.to_s).to eq "Queen-high flush"
       end
     end
     
-    describe "hand with high card AS" do
-      it "should output 'Ace high'" do
-        expect(ace_high.to_s).to eq "Ace high"
+    describe "all-spades hand with high card AS" do
+      it "should output 'Ace-high flush'" do
+        expect(ace_high_flush.to_s).to eq "Ace-high flush"
       end
     end
     
-    describe "hand with high card TH" do
-      it "should output 'Ten high'" do
-        expect(ten_high.to_s).to eq "Ten high"
+    describe "all-hearts hand with high card 10H" do
+      it "should output 'Ten-high flush'" do
+        expect(ten_high_flush.to_s).to eq "Ten-high flush"
       end
     end
   end

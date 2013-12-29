@@ -37,14 +37,12 @@ class Hand
   def compare_kickers(hand)
     return 0 if @kickers.length == 0
     
-    index = 0
-    result = 0
     kickers = @kickers.sort {|a, b| b <=> a}
     other_kickers = hand.kickers.sort {|a, b| b <=> a}
-    
-    while result == 0 do
-      result = kickers[index] <=> other_kickers[index]
-      index == kickers.length - 1 ? break : index += 1
+    result = 0
+    kickers.each_with_index do |kicker, index|
+      result = kicker <=> other_kickers[index]
+      break if result != 0
     end
     
     result

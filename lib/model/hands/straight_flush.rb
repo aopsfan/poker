@@ -4,10 +4,8 @@ class StraightFlush < Straight
   end
   
   def self.generate(cards) # note that this algorithm will ONLY work when cards has 5 objects
-    hand = Straight.generate cards
-    if hand != nil && cards.map{|card| card.suit}.uniq.length == 1
-      hand
-    end
+    hand = StraightFlush.new(cards)
+    hand.valid && cards.map{|card| card.suit}.uniq.length == 1 ? hand : nil
   end
   
   def to_s

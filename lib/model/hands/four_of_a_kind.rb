@@ -6,7 +6,7 @@ class FourOfAKind < Hand
   end
   
   def self.generate(cards)
-    hand = ThreeOfAKind.new
+    hand = FourOfAKind.new
     
     ranks = cards.map{|card| card.rank}
     trips_ranks = ranks.select{|rank| ranks.count(rank) == 4}

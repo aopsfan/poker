@@ -8,7 +8,6 @@ class Player
   
   def bet(chips)
     @chips -= chips
-    chips
   end
   
   def collect(chips)
@@ -20,7 +19,23 @@ class Player
   end
   
   def drop_card(rank, suit)
-    @cards.reject!{|card| card.rank == rank && card.suit == suit}
+    dropped_card = nil
+    @cards.reject! do |card|
+      if card.rank == rank && card.suit == suit
+        dropped_card = card
+        true
+      else
+        false
+      end
+    end
+    
+    dropped_card
+  end
+  
+  def drop_all
+    dropped_cards = @cards
+    @cards = []
+    dropped_cards
   end
   
   def best_hand

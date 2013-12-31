@@ -9,29 +9,21 @@ describe Player do
   describe "#bet" do
     context "when betting 5" do
       before :each do
-        @result = @player.bet(5)
+        @player.bet(5)
       end
       
       it "has 95 chips" do
         expect(@player.chips).to eq 95
       end
-      
-      it "returns 5" do
-        expect(@result).to eq 5
-      end
     end
     
     context "when betting 10" do
       before :each do
-        @result = @player.bet(10)
+        @player.bet(10)
       end
       
       it "has 90 chips" do
         expect(@player.chips).to eq 90
-      end
-      
-      it "returns 10" do
-        expect(@result).to eq 10
       end
     end
   end
@@ -107,11 +99,16 @@ describe Player do
     
     context "when dropping ten of spades" do
       before :each do
-        @player.drop_card(:ten, :spades)
+        @card = @player.drop_card(:ten, :spades)
       end
       
       it "has 2 cards" do
         expect(@player.cards.length).to eq 2
+      end
+      
+      it "returns ten of spades" do
+        expect(@card.rank).to eq :ten
+        expect(@card.suit).to eq :spades
       end
       
       it "has no ten of spades" do
@@ -123,11 +120,35 @@ describe Player do
     
     context "when dropping five of spades" do
       before :each do
-        @player.drop_card(:five, :spades)
+        @card = @player.drop_card(:five, :spades)
       end
       
       it "has 3 cards" do
         expect(@player.cards.length).to eq 3
+      end
+      
+      it "returns nil" do
+        expect(@card).to be_nil
+      end
+    end
+  end
+  
+  describe "#drop_all" do
+    before :each do
+      @cards = @player.take_cards [Card.new(:ten, :spades), Card.new(:ten, :clubs), Card.new(:ace, :spades)]
+    end
+    
+    context "when dropping all cards" do
+      before :each do
+        @player.drop_all
+      end
+      
+      it "has no cards" do
+        expect(@player.cards.empty?).to be_true
+      end
+      
+      it "returns 3 cards" do
+        expect(@cards.length).to eq 3
       end
     end
   end

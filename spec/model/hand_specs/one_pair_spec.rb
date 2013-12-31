@@ -43,11 +43,11 @@ describe OnePair do
       describe "pair" do
         subject {generated_hand.pair}
         
-        it "should have 2 cards" do
+        it "has 2 cards" do
           expect(subject.length).to eq 2
         end
     
-        it "should be Fives" do
+        it "is Fives" do
           expect(subject[0].rank).to eq :five
           expect(subject[1].rank).to eq :five
         end
@@ -56,11 +56,11 @@ describe OnePair do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 3 objects" do
+        it "has 3 objects" do
           expect(subject.length).to eq 3
         end
         
-        it "should not have the pair" do
+        it "does not have the pair" do
           expect(subject.include? generated_hand.pair[0]).to be_false
           expect(subject.include? generated_hand.pair[1]).to be_false
         end
@@ -68,7 +68,7 @@ describe OnePair do
     end
     
     context "when bad hand is generated" do
-      it "should be nil" do
+      it "is nil" do
         expect(bad_generated_hand).to be_nil
       end
     end
@@ -76,15 +76,15 @@ describe OnePair do
   
   describe "#<=>" do
     describe "Queens" do
-      it "should be less than Aces" do
+      it "is less than Aces" do
         expect(queens < aces).to be_true
       end
       
-      it "should be greater than Tens" do
+      it "is greater than Tens" do
         expect(queens > tens).to be_true
       end
       
-      it "should be equal to other Queens" do
+      it "is equal to other Queens" do
         expect(queens == queens_2).to be_true
       end
     end
@@ -92,19 +92,19 @@ describe OnePair do
   
   describe "#to_s" do
     describe "hand with pair of Qs" do
-      it "should output 'Pair of Queens'" do
+      it "returns 'Pair of Queens'" do
         expect(queens.to_s).to eq "Pair of Queens"
       end
     end
     
     describe "hand with pair of As" do
-      it "should output 'Pair of Aces'" do
+      it "returns 'Pair of Aces'" do
         expect(aces.to_s).to eq "Pair of Aces"
       end
     end
     
     describe "hand with pair of 10s" do
-      it "should output 'Pair of Tens'" do
+      it "returns 'Pair of Tens'" do
         expect(tens.to_s).to eq "Pair of Tens"
       end
     end

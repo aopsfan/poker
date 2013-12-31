@@ -59,11 +59,11 @@ describe FullHouse do
       describe "set" do
         subject {generated_hand.set}
         
-        it "should have 3 cards" do
+        it "has 3 cards" do
           expect(subject.length).to eq 3
         end
     
-        it "should be Fives" do
+        it "is Fives" do
           expect(subject[0].rank).to eq :five
           expect(subject[1].rank).to eq :five
           expect(subject[2].rank).to eq :five
@@ -73,11 +73,11 @@ describe FullHouse do
       describe "pair" do
         subject {generated_hand.pair}
         
-        it "should have 2 cards" do
+        it "has 2 cards" do
           expect(subject.length).to eq 2
         end
         
-        it "should be Twos" do
+        it "is Twos" do
           expect(subject[0].rank).to eq :two
           expect(subject[1].rank).to eq :two
         end
@@ -86,7 +86,7 @@ describe FullHouse do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should be empty" do
+        it "is empty" do
           expect(subject.empty?).to be_true
         end
       end
@@ -96,11 +96,11 @@ describe FullHouse do
       describe "set" do
         subject {generated_hand_2.set}
         
-        it "should have 3 cards" do
+        it "has 3 cards" do
           expect(subject.length).to eq 3
         end
     
-        it "should be Twos" do
+        it "is Twos" do
           expect(subject[0].rank).to eq :two
           expect(subject[1].rank).to eq :two
           expect(subject[2].rank).to eq :two
@@ -110,11 +110,11 @@ describe FullHouse do
       describe "pair" do
         subject {generated_hand_2.pair}
         
-        it "should have 2 cards" do
+        it "has 2 cards" do
           expect(subject.length).to eq 2
         end
         
-        it "should be Fives" do
+        it "is Fives" do
           expect(subject[0].rank).to eq :five
           expect(subject[1].rank).to eq :five
         end
@@ -123,14 +123,14 @@ describe FullHouse do
       describe "kickers" do
         subject {generated_hand_2.kickers}
         
-        it "should be empty" do
+        it "is empty" do
           expect(subject.empty?).to be_true
         end
       end
     end
     
     context "when bad hand is generated" do
-      it "should be nil" do
+      it "is nil" do
         expect(bad_generated_hand).to be_nil
         expect(bad_generated_hand_2).to be_nil
       end
@@ -139,15 +139,15 @@ describe FullHouse do
   
   describe "#<=>" do
     describe "Queens full of Eights" do
-      it "should be less than Aces over Twos" do
+      it "is less than Aces over Twos" do
         expect(queens_full_of_eights < aces_full_of_twos).to be_true
       end
       
-      it "should be greater than Tens full of queens" do
+      it "is greater than Tens full of queens" do
         expect(queens_full_of_eights > tens_full_of_queens).to be_true
       end
       
-      it "should be greater than Twos full of Eights" do
+      it "is greater than Twos full of Eights" do
         expect(queens_full_of_eights > twos_full_of_eights).to be_true
       end
     end
@@ -155,25 +155,25 @@ describe FullHouse do
   
   describe "#to_s" do
     describe "hand with three Qs and pair of 8s" do
-      it "should output 'Queens full of Eights'" do
+      it "returns 'Queens full of Eights'" do
         expect(queens_full_of_eights.to_s).to eq "Queens full of Eights"
       end
     end
     
     describe "hand with three As and pair of 2s" do
-      it "should output 'Aces full of Twos'" do
+      it "returns 'Aces full of Twos'" do
         expect(aces_full_of_twos.to_s).to eq "Aces full of Twos"
       end
     end
     
     describe "hand with three 10s and pair of Qs" do
-      it "should output 'Tens full of Queens'" do
+      it "returns 'Tens full of Queens'" do
         expect(tens_full_of_queens.to_s).to eq "Tens full of Queens"
       end
     end
     
     describe "hand with three 2s and pair of 8s" do
-      it "should output 'Twos full of Eights'" do
+      it "returns 'Twos full of Eights'" do
         expect(twos_full_of_eights.to_s).to eq "Twos full of Eights"
       end
     end

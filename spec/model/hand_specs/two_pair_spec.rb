@@ -60,11 +60,11 @@ describe TwoPair do
       describe "high pair" do
         subject {generated_hand.high_pair}
         
-        it "should have 2 cards" do
+        it "has 2 cards" do
           expect(subject.length).to eq 2
         end
     
-        it "should be Fives" do
+        it "is Fives" do
           expect(subject[0].rank).to eq :five
           expect(subject[1].rank).to eq :five
         end
@@ -73,11 +73,11 @@ describe TwoPair do
       describe "low pair" do
         subject {generated_hand.low_pair}
         
-        it "should have 2 cards" do
+        it "has 2 cards" do
           expect(subject.length).to eq 2
         end
         
-        it "should be Threes" do
+        it "is Threes" do
           expect(subject[0].rank).to eq :three
           expect(subject[1].rank).to eq :three
         end
@@ -86,11 +86,11 @@ describe TwoPair do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 1 object" do
+        it "has 1 object" do
           expect(subject.length).to eq 1
         end
         
-        it "should not have either pair" do
+        it "does not have either pair" do
           expect(subject.include? generated_hand.high_pair[0]).to be_false
           expect(subject.include? generated_hand.high_pair[1]).to be_false
           expect(subject.include? generated_hand.low_pair[0]).to be_false
@@ -100,7 +100,7 @@ describe TwoPair do
     end
     
     context "when bad hand is generated" do
-      it "should be nil" do
+      it "is nil" do
         expect(bad_generated_hand_1).to be_nil
         expect(bad_generated_hand_2).to be_nil
       end
@@ -109,19 +109,19 @@ describe TwoPair do
   
   describe "#<=>" do
     describe "Queens over Eights" do
-      it "should be less than Aces over Twos" do
+      it "is less than Aces over Twos" do
         expect(queens_over_eights < aces_over_twos).to be_true
       end
       
-      it "should be greater than Tens over Eights" do
+      it "is greater than Tens over Eights" do
         expect(queens_over_eights > tens_over_eights).to be_true
       end
       
-      it "should be greater than Queens over Sixes" do
+      it "is greater than Queens over Sixes" do
         expect(queens_over_eights > queens_over_sixes).to be_true
       end
       
-      it "should be equal to other Queens over Eights" do
+      it "is equal to other Queens over Eights" do
         expect(queens_over_eights == queens_over_eights_2).to be_true
       end
     end
@@ -129,25 +129,25 @@ describe TwoPair do
   
   describe "#to_s" do
     describe "hand with pair of Qs and pair of 8s" do
-      it "should output 'Queens over Eights'" do
+      it "returns 'Queens over Eights'" do
         expect(queens_over_eights.to_s).to eq "Queens over Eights"
       end
     end
     
     describe "hand with pair of Qs and pair of 6s" do
-      it "should output 'Queens over Sixes'" do
+      it "returns 'Queens over Sixes'" do
         expect(queens_over_sixes.to_s).to eq "Queens over Sixes"
       end
     end
     
     describe "hand with pair of As and pair of 2s" do
-      it "should output 'Aces over Twos'" do
+      it "returns 'Aces over Twos'" do
         expect(aces_over_twos.to_s).to eq "Aces over Twos"
       end
     end
     
     describe "hand with pair of 10s and pair of 8s" do
-      it "should output 'Tens over Eights'" do
+      it "returns 'Tens over Eights'" do
         expect(tens_over_eights.to_s).to eq "Tens over Eights"
       end
     end

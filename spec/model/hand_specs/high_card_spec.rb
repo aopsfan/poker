@@ -37,11 +37,11 @@ describe HighCard do
       describe "high" do
         subject {generated_hand.high}
         
-        it "should be an ace" do
+        it "is an ace" do
           expect(subject.rank).to eq :ace
         end
     
-        it "should be a spade" do
+        it "is a spade" do
           expect(subject.suit).to eq :spades
         end
       end
@@ -49,11 +49,11 @@ describe HighCard do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 4 objects" do
+        it "has 4 objects" do
           expect(subject.length).to eq 4
         end
         
-        it "should not have the high" do
+        it "does not have the high" do
           expect(subject.include? generated_hand.high).to be_false
         end
       end
@@ -62,15 +62,15 @@ describe HighCard do
   
   describe "#<=>" do
     describe "Queen high" do
-      it "should be less than Ace high" do
+      it "is less than Ace high" do
         expect(queen_high < ace_high).to be_true
       end
       
-      it "should be greater than Ten high" do
+      it "is greater than Ten high" do
         expect(queen_high > ten_high).to be_true
       end
       
-      it "should be equal to other Queen high" do
+      it "is equal to other Queen high" do
         expect(queen_high == queen_high_2).to be_true
       end
     end
@@ -78,19 +78,19 @@ describe HighCard do
   
   describe "#to_s" do
     describe "hand with high card QC" do
-      it "should output 'Queen high'" do
+      it "returns 'Queen high'" do
         expect(queen_high.to_s).to eq "Queen high"
       end
     end
     
     describe "hand with high card AS" do
-      it "should output 'Ace high'" do
+      it "returns 'Ace high'" do
         expect(ace_high.to_s).to eq "Ace high"
       end
     end
     
     describe "hand with high card 10H" do
-      it "should output 'Ten high'" do
+      it "returns 'Ten high'" do
         expect(ten_high.to_s).to eq "Ten high"
       end
     end

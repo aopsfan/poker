@@ -43,11 +43,11 @@ describe FourOfAKind do
       describe "set" do
         subject {generated_hand.set}
         
-        it "should have 4 cards" do
+        it "has 4 cards" do
           expect(subject.length).to eq 4
         end
     
-        it "should be Fives" do
+        it "is Fives" do
           expect(subject[0].rank).to eq :five
           expect(subject[1].rank).to eq :five
           expect(subject[2].rank).to eq :five
@@ -58,11 +58,11 @@ describe FourOfAKind do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should have 1 object" do
+        it "has 1 object" do
           expect(subject.length).to eq 1
         end
         
-        it "should not have the set" do
+        it "does not have the set" do
           expect(subject.include? generated_hand.set[0]).to be_false
           expect(subject.include? generated_hand.set[1]).to be_false
           expect(subject.include? generated_hand.set[2]).to be_false
@@ -72,7 +72,7 @@ describe FourOfAKind do
     end
     
     context "when bad hand is generated" do
-      it "should be nil" do
+      it "is nil" do
         expect(bad_generated_hand).to be_nil
         expect(bad_generated_hand_2).to be_nil
       end
@@ -81,11 +81,11 @@ describe FourOfAKind do
   
   describe "#<=>" do
     describe "Quads (Queens)" do
-      it "should be less than Quads (Aces)" do
+      it "is less than Quads (Aces)" do
         expect(quads_queens < quads_aces).to be_true
       end
       
-      it "should be greater than Quads (Tens)" do
+      it "is greater than Quads (Tens)" do
         expect(quads_queens > quads_tens).to be_true
       end
     end
@@ -93,19 +93,19 @@ describe FourOfAKind do
   
   describe "#to_s" do
     describe "hand with three Qs" do
-      it "should output 'Quads (Queens)'" do
+      it "returns 'Quads (Queens)'" do
         expect(quads_queens.to_s).to eq "Quads (Queens)"
       end
     end
     
     describe "hand with three As" do
-      it "should output 'Quads (Aces)'" do
+      it "returns 'Quads (Aces)'" do
         expect(quads_aces.to_s).to eq "Quads (Aces)"
       end
     end
     
     describe "hand with three 10s" do
-      it "should output 'Quads (Tens)'" do
+      it "returns 'Quads (Tens)'" do
         expect(quads_tens.to_s).to eq "Quads (Tens)"
       end
     end

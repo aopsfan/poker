@@ -59,11 +59,11 @@ describe Flush do
       describe "flush cards" do
         subject {generated_hand.flush_cards}
         
-        it "should have 5 objects" do
+        it "has 5 objects" do
           expect(subject.length).to eq 5
         end
     
-        it "should be all clubs" do
+        it "is all clubs" do
           subject.each do |card|
             expect(card.suit).to eq :clubs
           end
@@ -73,14 +73,14 @@ describe Flush do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should be empty" do
+        it "is empty" do
           expect(subject.empty?).to be_true
         end
       end
     end
     
     context "when bad hand is generated" do
-      it "should be nil" do
+      it "is nil" do
         expect(bad_generated_hand).to be_nil
       end
     end
@@ -88,19 +88,19 @@ describe Flush do
   
   describe "#<=>" do
     describe "Queen-high flush" do
-      it "should be less than Ace-high flush" do
+      it "is less than Ace-high flush" do
         expect(queen_high_flush < ace_high_flush).to be_true
       end
       
-      it "should be greater than Ten-high flush" do
+      it "is greater than Ten-high flush" do
         expect(queen_high_flush > ten_high_flush).to be_true
       end
       
-      it "should be less than Queen-high flush ending in five" do
+      it "is less than Queen-high flush ending in five" do
         expect(queen_high_flush < queen_high_flush_2).to be_true
       end
       
-      it "should be equal to other Queen-high flush" do
+      it "is equal to other Queen-high flush" do
         expect(queen_high_flush == queen_high_flush_3).to be_true
       end
     end
@@ -108,19 +108,19 @@ describe Flush do
   
   describe "#to_s" do
     describe "all-diamonds hand with high card QD" do
-      it "should output 'Queen-high flush'" do
+      it "returns 'Queen-high flush'" do
         expect(queen_high_flush.to_s).to eq "Queen-high flush"
       end
     end
     
     describe "all-spades hand with high card AS" do
-      it "should output 'Ace-high flush'" do
+      it "returns 'Ace-high flush'" do
         expect(ace_high_flush.to_s).to eq "Ace-high flush"
       end
     end
     
     describe "all-hearts hand with high card 10H" do
-      it "should output 'Ten-high flush'" do
+      it "returns 'Ten-high flush'" do
         expect(ten_high_flush.to_s).to eq "Ten-high flush"
       end
     end

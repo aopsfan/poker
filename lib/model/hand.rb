@@ -26,9 +26,9 @@ class Hand
     result
   end
   
-  # def inspect
-  #   "#{self.class}: '#{to_s}'"
-  # end
+  def inspect
+    "#{self.class}: '#{to_s}'"
+  end
   
   protected
   

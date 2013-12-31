@@ -28,13 +28,13 @@ describe Hand do
     
     context "when comparing hands of different ranks" do
       describe "four of a kind" do
-        it "should always be greater than two pair" do
+        it "is always greater than two pair" do
           expect(four_of_a_kind > two_pair).to be_true
         end
       end
 
       describe "two pair" do
-        it "should always be less than four of a kind" do
+        it "is always less than four of a kind" do
           expect(two_pair < four_of_a_kind).to be_true
         end
       end
@@ -72,19 +72,19 @@ describe Hand do
     
     context "when comparing hands of the same rank" do
       describe "hand_1" do
-        it "should have lower value kickers than hand_2" do
+        it "has lower value kickers than hand_2" do
           expect(hand_1 < hand_2).to be_true
         end
 
-        it "should have higher value kickers than hand_3" do
+        it "has higher value kickers than hand_3" do
           expect(hand_1 > hand_3).to be_true
         end
 
-        it "should have higher value kickers than hand_4" do
+        it "has higher value kickers than hand_4" do
           expect(hand_1 > hand_4).to be_true
         end
 
-        it "should have equal value kickers to hand_5" do
+        it "has equal value kickers to hand_5" do
           expect(hand_1 == hand_5).to be_true
         end
       end

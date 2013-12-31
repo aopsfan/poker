@@ -79,11 +79,11 @@ describe Straight do
       describe "straight cards" do
         subject {generated_hand.straight_cards}
     
-        it "should have 5 objects" do
+        it "has 5 objects" do
           expect(subject.length).to eq 5
         end
         
-        it "should be in sequential order" do
+        it "is in sequential order" do
           expect(subject[0].rank).to eq :two
           expect(subject[1].rank).to eq :three
           expect(subject[2].rank).to eq :four
@@ -95,7 +95,7 @@ describe Straight do
       describe "kickers" do
         subject {generated_hand.kickers}
         
-        it "should be empty" do
+        it "is empty" do
           expect(subject.empty?).to be_true
         end
       end
@@ -105,11 +105,11 @@ describe Straight do
       describe "straight cards" do
         subject {generated_hand_2.straight_cards}
     
-        it "should have 5 objects" do
+        it "has 5 objects" do
           expect(subject.length).to eq 5
         end
         
-        it "should be in sequential order" do
+        it "is in sequential order" do
           expect(subject[0].rank).to eq :ace
           expect(subject[1].rank).to eq :two
           expect(subject[2].rank).to eq :three
@@ -121,7 +121,7 @@ describe Straight do
       describe "kickers" do
         subject {generated_hand_2.kickers}
         
-        it "should be empty" do
+        it "is empty" do
           expect(subject.empty?).to be_true
         end
       end
@@ -131,11 +131,11 @@ describe Straight do
       describe "straight cards" do
         subject {generated_hand_3.straight_cards}
     
-        it "should have 5 objects" do
+        it "has 5 objects" do
           expect(subject.length).to eq 5
         end
         
-        it "should be in sequential order" do
+        it "is in sequential order" do
           expect(subject[0].rank).to eq :ten
           expect(subject[1].rank).to eq :jack
           expect(subject[2].rank).to eq :queen
@@ -147,14 +147,14 @@ describe Straight do
       describe "kickers" do
         subject {generated_hand_3.kickers}
         
-        it "should be empty" do
+        it "is empty" do
           expect(subject.empty?).to be_true
         end
       end
     end
     
     context "when bad hand is generated" do
-      it "should be nil" do
+      it "is nil" do
         expect(bad_generated_hand).to be_nil
         expect(bad_generated_hand_2).to be_nil
       end
@@ -163,19 +163,19 @@ describe Straight do
   
   describe "#<=>" do
     describe "Queen-high straight" do
-      it "should be less than Royal straight" do
+      it "is less than Royal straight" do
         expect(queen_high_straight < royal_straight).to be_true
       end
       
-      it "should be greater than Ten-high straight" do
+      it "is greater than Ten-high straight" do
         expect(queen_high_straight > ten_high_straight).to be_true
       end
       
-      it "should be greater than Five-high straight" do
+      it "is greater than Five-high straight" do
         expect(queen_high_straight > five_high_straight).to be_true
       end
       
-      it "should be equal to other Queen-high straight" do
+      it "is equal to other Queen-high straight" do
         expect(queen_high_straight == queen_high_straight_2).to be_true
       end
     end
@@ -183,25 +183,25 @@ describe Straight do
   
   describe "#to_s" do
     describe "8-9-10-J-Q hand" do
-      it "should output 'Queen-high straight'" do
+      it "returns 'Queen-high straight'" do
         expect(queen_high_straight.to_s).to eq "Queen-high straight"
       end
     end
     
     describe "10-J-Q-K-A hand" do
-      it "should output 'Royal straight'" do
+      it "returns 'Royal straight'" do
         expect(royal_straight.to_s).to eq "Royal straight"
       end
     end
     
     describe "6-7-8-9-10 hand" do
-      it "should output 'Ten-high straight'" do
+      it "returns 'Ten-high straight'" do
         expect(ten_high_straight.to_s).to eq "Ten-high straight"
       end
     end
     
     describe "A-2-3-4-5 hand" do
-      it "should output '5-high straight'" do
+      it "returns '5-high straight'" do
         expect(five_high_straight.to_s).to eq "Five-high straight"
       end
     end

@@ -45,4 +45,16 @@ class String
   def pluralize
     self[self.size - 1] == 'x' ? self + "es" : self + "s"
   end
+  
+  def to_card # LORD FORIVE ME FOR THIS AWFUL CODE
+    if size == 2
+      rank = self[0]
+      suit = self[1]
+    elsif size == 3
+      rank = self[0..1]
+      suit = self[2]
+    end
+    ranks_index = Card::STRING_RANKS.index(rank)
+    Card.new(Card::RANKS[ranks_index], Card::SUITS.find{|key, value| value == suit}.first)
+  end
 end

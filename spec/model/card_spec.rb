@@ -104,3 +104,30 @@ describe Card do
   end
   
 end
+
+describe String do
+  
+  describe "#to_card" do
+    describe "two of spades" do
+      it "returns the two of spades" do
+        expect("2S".to_card.rank).to eq :two
+        expect("2S".to_card.suit).to eq :spades
+      end
+    end
+    
+    describe "ten of diamonds" do
+      it "returns the ten of diamonds" do
+        expect("10D".to_card.rank).to eq :ten
+        expect("10D".to_card.suit).to eq :diamonds
+      end
+    end
+    
+    describe "ace of spades" do
+      it "returns the ace of spades" do
+        expect("AS".to_card.rank).to eq :ace
+        expect("AS".to_card.suit).to eq :spades
+      end
+    end
+  end
+  
+end

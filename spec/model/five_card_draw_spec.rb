@@ -263,6 +263,55 @@ describe FiveCardDraw do
         end
       end
     end
+
+    context "when every player except player 4 folds" do
+      before :each do
+        @bets = {
+          0 => :fold,
+          1 => :fold,
+          2 => :fold,
+          3 => :call
+        }
+      end
+      
+      context "after round 1" do
+        before :each do
+          @game.start_deal
+          @deal = @game.play_round_of_betting do |player, min_bet|
+            @bets[@game.players.index(player)]
+          end
+        end
+        
+        it "has 5 chips in the pot" do
+          expect(@deal[:pot]).to eq 5
+        end
+
+        it "takes no more chips from player 1" do
+          expect(@game.players[0].chips).to eq 99 # 100 - 1
+        end
+
+        it "takes no more chips from player 32" do
+          expect(@game.players[1].chips).to eq 99 # 100 - 1
+        end
+        
+        it "takes no more chips from player 3" do
+          expect(@game.players[2].chips).to eq 99 # 100 - 1
+        end
+
+        it "makes player 4 the deal winner" do
+          expect(@deal[:winner] == nil).to be_false
+          expect(@game.players.index(@deal[:winner])).to eq 3
+        end
+        
+        it "gives a net of 3 chips to player 4" do
+          expect(@game.players[3].chips).to eq 103 # 100 - 1 - 1 + 5
+        end
+
+        it "does not have a game winner" do
+          expect(@game.winner).to be_nil
+        end
+      end
+    end
   end
   
 end

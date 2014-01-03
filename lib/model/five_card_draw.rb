@@ -78,11 +78,12 @@ class FiveCardDraw
     end
     
     @betting_players.reject!{|player| folding_players.include? player}
+    round_over = @final_round || @betting_players.count == 1
     
     # finish up
     deal = {:pot => @pot}
     
-    if @final_round
+    if round_over
       # deal pot :P
       best_players = @betting_players.sort{|b, a| a.best_hand <=> b.best_hand} # TODO: fix this, probably very slow
       winner = best_players.first

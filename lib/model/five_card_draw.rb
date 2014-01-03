@@ -8,10 +8,11 @@ class FiveCardDraw
   end
   
   def initialize(number_of_players, chips_per_player)
-    @action_for = Hash.new
+    @action_to_block_map = Hash.new
     @players = []
     @min_bet = 0
     @pot = 0
+    @final_round = false
     
     number_of_players.times do
       @players << Player.new(chips_per_player)
@@ -20,15 +21,15 @@ class FiveCardDraw
     @betting_players = @players.dup
   end
   
-  def action(sym, &block)
-    @action_for[sym] = block
+  def register(sym, &block)
+    @action_to_block_map[sym] = block
   end
   
-  def active_player_number
-    index_to_player @players.index(@active_player)
+  def winner
+    nil
   end
   
-  def play_round
+  def start_deal
     # deal
     5.times do
       @betting_players.each do |player|
@@ -36,59 +37,39 @@ class FiveCardDraw
       end
     end
     
-    # ante up
+    # ante
     @betting_players.each do |player|
-      @pot += ante
-      player.bet(ante)
-      @active_player = player
-      @action_for[:ante].call
+      player.bet(@ante)
+      @pot += @ante
     end
     
-    # first round of betting
-    @action_for[:enter_first_round_of_betting].call
-    request_bets
-    
-    # request cards
-    @betting_players.each do |player|
-      @active_player = player
-      dropped_cards = @action_for[:request_cards].call
-      
-      dropped_cards.each do |card_array|
-        player.drop_card(card_array.first, card_array.last)
+    # return deal info
+    {:pot => @pot}
+  end
+  
+  def play_round_of_betting
+    if @final_round
+      # request cards
+      @betting_players.each do |player|
+        dropped_cards = @action_to_block_map[:replace_cards].call(player)
+        
+        dropped_cards.each do |card_array|
+          player.drop_card(card_array.first, card_array.last)
+        end
+        player.take_cards(@deck.deal(dropped_cards.length))
       end
-      player.take_cards(@deck.deal(dropped_cards.length))
     end
     
-    # second round of betting
-    @action_for[:enter_second_round_of_betting].call
-    request_bets
-    
-    # deal pot :P
-    best_players = @betting_players.sort{|b, a| a.best_hand <=> b.best_hand} # TODO: fix this, probably very slow
-    winner = best_players.first
-    winner.collect(@pot)
-    @action_for[:collect_pot].call(index_to_player @betting_players.index(winner))
-    
-    # reset everything
-    @betting_players = @players
-    @pot = 0
-    @active_player = nil
-  end
-  
-  private
-  
-  def index_to_player(index)
-    index + 1
-  end
-  
-  def request_bets
+    # bet
     folding_players = []
     @betting_players.each do |player|
-      @active_player = player
-      bet = @action_for[:bet].call(@min_bet)
+      bet = yield(player, @min_bet)
       
       if bet == :fold
         folding_players << player
+      elsif bet == :call
+        player.bet(@min_bet)
+        @pot += @min_bet
       else
         player.bet(bet)
         @min_bet = bet
@@ -97,6 +78,27 @@ class FiveCardDraw
     end
     
     @betting_players.reject!{|player| folding_players.include? player}
+    
+    # finish up
+    deal = {:pot => @pot}
+    
+    if @final_round
+      # deal pot :P
+      best_players = @betting_players.sort{|b, a| a.best_hand <=> b.best_hand} # TODO: fix this, probably very slow
+      winner = best_players.first
+      winner.collect(@pot)
+      deal[:winner] = winner
+      
+      # reset everything
+      @betting_players = @players
+      @pot = 0
+    end
+    
+    # change round number
+    @final_round = !@final_round
+    
+    # return deal info
+    deal
   end
   
 end

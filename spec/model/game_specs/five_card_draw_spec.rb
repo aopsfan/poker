@@ -32,6 +32,10 @@ describe FiveCardDraw do
         @deal = @game.start_deal
       end
       
+      it_behaves_like "a 5-card game during a deal" do
+        let(:game) {@game}
+      end
+      
       it "takes one chip per player" do
         @game.players.each do |player|
           expect(player.chips).to eq 99 # 100 - 1
@@ -41,6 +45,10 @@ describe FiveCardDraw do
       it "has 4 chips in the pot" do
         expect(@deal[:pot]).to eq 4
       end
+
+      it "does not have a deal winner yet" do
+        expect(@deal[:winner]).to be_nil
+      end
     end
     
     context "when ante is 2" do
@@ -49,7 +57,11 @@ describe FiveCardDraw do
         @deal = @game.start_deal
       end
       
-      it "takes one chip per player" do
+      it_behaves_like "a 5-card game during a deal" do
+        let(:game) {@game}
+      end
+
+      it "takes two chips per player" do
         @game.players.each do |player|
           expect(player.chips).to eq 98 # 100 - 2
         end
@@ -57,6 +69,10 @@ describe FiveCardDraw do
       
       it "has 8 chips in the pot" do
         expect(@deal[:pot]).to eq 8
+      end
+
+      it "does not have a deal winner yet" do
+        expect(@deal[:winner]).to be_nil
       end
     end
   end
@@ -92,32 +108,40 @@ describe FiveCardDraw do
           end
         end
 
+        it_behaves_like "a 5-card game during a deal" do
+          let(:game) {@game}
+        end
+
         it "has 11 chips in the pot" do
           expect(@deal[:pot]).to eq 11 # hahaha
         end
-
-        it "takes another chip from player 1" do
-          expect(@game.players[0].chips).to eq 98 # 100 - 1 - 1
+        
+        describe "player 1" do
+          it "has 98 chips" do
+            expect(@game.players[0].chips).to eq 98 # 100 - 1 - 1
+          end
+        end
+        
+        describe "player 2" do
+          it "has 96 chips" do
+            expect(@game.players[1].chips).to eq 96 # 100 - 1 - 3
+          end
         end
 
-        it "takes another 3 chips from player 2" do
-          expect(@game.players[1].chips).to eq 96 # 100 - 1 - 3
+        describe "player 3" do
+          it "has 96 chips" do
+            expect(@game.players[2].chips).to eq 96 # 100 - 1 - 3
+          end
         end
-
-        it "takes another 3 chips from player 3" do
-          expect(@game.players[2].chips).to eq 96 # 100 - 1 - 3
-        end
-
-        it "takes no more chips from player 4" do
-          expect(@game.players[3].chips).to eq 99 # 100 - 1
+        
+        describe "player 4" do
+          it "has 99 chips" do
+            expect(@game.players[3].chips).to eq 99 # 100 - 1
+          end
         end
 
         it "does not have a deal winner yet" do
           expect(@deal[:winner]).to be_nil
-        end
-
-        it "does not have a game winner" do
-          expect(@game.winner).to be_nil
         end
       end
       
@@ -132,33 +156,42 @@ describe FiveCardDraw do
           end
         end
         
-        it "has 27 chips in the pot" do
+        it_behaves_like "an active game after a deal" do
+          let(:game) {@game}
+        end
+        
+        it "had 27 chips in the pot" do
           expect(@deal[:pot]).to eq 27
         end
-
-        it "takes another 4 chips from player 1" do
-          expect(@game.players[0].chips).to eq 94 # 100 - 1 - 1 - 4
-        end
-
-        it "takes another 6 chips from player 2" do
-          expect(@game.players[1].chips).to eq 90 # 100 - 1 - 3 - 6
+        
+        describe "player 1" do
+          it "has 94 chips" do
+            expect(@game.players[0].chips).to eq 94 # 100 - 1 - 1 - 4
+          end
         end
         
-        it "takes no more chips from player 4" do
-          expect(@game.players[3].chips).to eq 99 # 100 - 1
+        describe "player 2" do
+          it "has 90 chips" do
+            expect(@game.players[1].chips).to eq 90 # 100 - 1 - 3 - 6
+          end
         end
 
-        it "makes player 3 the deal winner" do
-          expect(@deal[:winner] == nil).to be_false
-          expect(@game.players.index(@deal[:winner])).to eq 2
+        describe "player 3" do
+          subject {@game.players[2]}
+          
+          it "has 117 chips" do
+            expect(subject.chips).to eq 117 # 100 - 1 - 3 - 6 + 27
+          end
+          
+          it "wins the deal" do
+            expect(subject).to eq @deal[:winner]
+          end
         end
         
-        it "gives a net of 21 chips to player 3" do
-          expect(@game.players[2].chips).to eq 117 # 100 - 1 - 3 - 6 + 27
-        end
-
-        it "does not have a game winner" do
-          expect(@game.winner).to be_nil
+        describe "player 4" do
+          it "has 99 chips" do
+            expect(@game.players[3].chips).to eq 99 # 100 - 1
+          end
         end
       end
     end
@@ -193,32 +226,40 @@ describe FiveCardDraw do
           end
         end
 
+        it_behaves_like "a 5-card game during a deal" do
+          let(:game) {@game}
+        end
+        
         it "has 11 chips in the pot" do
           expect(@deal[:pot]).to eq 11 # hahaha
         end
 
-        it "takes another chip from player 1" do
-          expect(@game.players[0].chips).to eq 98 # 100 - 1 - 1
+        describe "player 1" do
+          it "has 98 chips" do
+            expect(@game.players[0].chips).to eq 98 # 100 - 1 - 1
+          end
+        end
+        
+        describe "player 2" do
+          it "has 96 chips" do
+            expect(@game.players[1].chips).to eq 96 # 100 - 1 - 3
+          end
         end
 
-        it "takes another 3 chips from player 2" do
-          expect(@game.players[1].chips).to eq 96 # 100 - 1 - 3
+        describe "player 3" do
+          it "has 96 chips" do
+            expect(@game.players[2].chips).to eq 96 # 100 - 1 - 3
+          end
         end
-
-        it "takes another 3 chips from player 3" do
-          expect(@game.players[2].chips).to eq 96 # 100 - 1 - 3
+        
+        describe "player 4" do
+          it "has 99 chips" do
+            expect(@game.players[3].chips).to eq 99 # 100 - 1
+          end
         end
-
-        it "takes no more chips from player 4" do
-          expect(@game.players[3].chips).to eq 99 # 100 - 1
-        end
-
+        
         it "does not have a deal winner yet" do
           expect(@deal[:winner]).to be_nil
-        end
-
-        it "does not have a game winner" do
-          expect(@game.winner).to be_nil
         end
       end
       
@@ -233,33 +274,42 @@ describe FiveCardDraw do
           end
         end
         
-        it "has 27 chips in the pot" do
+        it_behaves_like "an active game after a deal" do
+          let(:game) {@game}
+        end
+        
+        it "had 27 chips in the pot" do
           expect(@deal[:pot]).to eq 27
         end
-
-        it "takes another 4 chips from player 1" do
-          expect(@game.players[0].chips).to eq 94 # 100 - 1 - 1 - 4
+        
+        describe "player 1" do
+          it "has 94 chips" do
+            expect(@game.players[0].chips).to eq 94 # 100 - 1 - 1 - 4
+          end
         end
 
-        it "takes another 6 chips from player 3" do
-          expect(@game.players[2].chips).to eq 90 # 100 - 1 - 3 - 6
+        describe "player 2" do
+          subject {@game.players[1]}
+          
+          it "has 117 chips" do
+            expect(subject.chips).to eq 117 # 100 - 1 - 3 - 6 + 27
+          end
+          
+          it "wins the deal" do
+            expect(subject).to eq @deal[:winner]
+          end
         end
         
-        it "takes no more chips from player 4" do
-          expect(@game.players[3].chips).to eq 99 # 100 - 1
-        end
-
-        it "makes player 2 the deal winner" do
-          expect(@deal[:winner] == nil).to be_false
-          expect(@game.players.index(@deal[:winner])).to eq 1
+        describe "player 3" do
+          it "has 90 chips" do
+            expect(@game.players[2].chips).to eq 90 # 100 - 1 - 3 - 6
+          end
         end
         
-        it "gives a net of 21 chips to player 2" do
-          expect(@game.players[1].chips).to eq 117 # 100 - 1 - 3 - 6 + 27
-        end
-
-        it "does not have a game winner" do
-          expect(@game.winner).to be_nil
+        describe "player 4" do
+          it "has 99 chips" do
+            expect(@game.players[3].chips).to eq 99 # 100 - 1
+          end
         end
       end
     end
@@ -282,33 +332,42 @@ describe FiveCardDraw do
           end
         end
         
-        it "has 5 chips in the pot" do
+        it_behaves_like "an active game after a deal" do
+          let(:game) {@game}
+        end
+        
+        it "had 5 chips in the pot" do
           expect(@deal[:pot]).to eq 5
         end
-
-        it "takes no more chips from player 1" do
-          expect(@game.players[0].chips).to eq 99 # 100 - 1
-        end
-
-        it "takes no more chips from player 32" do
-          expect(@game.players[1].chips).to eq 99 # 100 - 1
+        
+        describe "player 1" do
+          it "has 99 chips" do
+            expect(@game.players[0].chips).to eq 99 # 100 - 1
+          end
         end
         
-        it "takes no more chips from player 3" do
-          expect(@game.players[2].chips).to eq 99 # 100 - 1
-        end
-
-        it "makes player 4 the deal winner" do
-          expect(@deal[:winner] == nil).to be_false
-          expect(@game.players.index(@deal[:winner])).to eq 3
+        describe "player 2" do
+          it "has 99 chips" do
+            expect(@game.players[1].chips).to eq 99 # 100 - 1
+          end
         end
         
-        it "gives a net of 3 chips to player 4" do
-          expect(@game.players[3].chips).to eq 103 # 100 - 1 - 1 + 5
+        describe "player 3" do
+          it "has 99 chips" do
+            expect(@game.players[2].chips).to eq 99 # 100 - 1
+          end
         end
 
-        it "does not have a game winner" do
-          expect(@game.winner).to be_nil
+        describe "player 4" do
+          subject {@game.players[3]}
+          
+          it "has 103 chips" do
+            expect(subject.chips).to eq 103 # 100 - 1 - 1 + 5
+          end
+          
+          it "wins the deal" do
+            expect(subject).to eq @deal[:winner]
+          end
         end
       end
     end

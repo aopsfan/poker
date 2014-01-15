@@ -16,13 +16,14 @@ RSpec.configure do |config|
   config.order = 'random'
 end
 
+# Basic models
 require_relative "../lib/model/card.rb"
 require_relative "../lib/model/player.rb"
 require_relative "../lib/model/game.rb"
 require_relative "../lib/model/games/five_card_draw.rb"
 require_relative "../lib/model/deck.rb"
 
-# Requires for the hand models.  In their corresponding tests, we test behavior
+# Hand models.  In their corresponding tests, we test behavior
 # of the model against cases with a standard 52-card deck and a 5-card hand.
 require_relative "../lib/model/hand.rb"
 require_relative "../lib/model/hands/high_card.rb"
@@ -34,3 +35,6 @@ require_relative "../lib/model/hands/straight.rb"
 require_relative "../lib/model/hands/flush.rb"
 require_relative "../lib/model/hands/four_of_a_kind.rb"
 require_relative "../lib/model/hands/straight_flush.rb"
+
+# Helpers
+require_relative "helper/shared_examples.rb"

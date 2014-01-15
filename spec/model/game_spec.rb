@@ -30,7 +30,7 @@ describe DerpGame do
      "3D", "8D", "10D", "2S",
      "5C", "8C", "10C", "JD",
      "AC", "QH", "JS", "KH"]
-   end
+  end
   
   before :each do
     deck = Deck.new default_cards
@@ -55,38 +55,42 @@ describe DerpGame do
         @game.play_deal
       end
       
-      it "removes all cards from each player" do
-        @game.players.each do |player|
-          expect(player.cards.empty?).to be_true
+      it_behaves_like "an active game after a deal" do
+        let(:game) {@game}
+      end
+      
+      describe "player 1" do
+        it "has 95 chips" do
+          expect(@game.players[0].chips).to eq 95
         end
       end
       
-      it "takes 5 chips from player 1" do
-        expect(@game.players[0].chips).to eq 95
+      describe "player 2" do
+        it "has 94 chips" do
+          expect(@game.players[1].chips).to eq 94
+        end
       end
       
-      it "takes 6 chips from player 2" do
-        expect(@game.players[1].chips).to eq 94
+      describe "player 3" do
+        subject {@game.players[2]}
+        
+        it "has 112 chips" do
+          expect(subject.chips).to eq 112
+        end
+        
+        it "wins the deal" do
+          expect(subject).to eq @winner
+        end
       end
       
-      it "takes 1 chip from player 4" do
-        expect(@game.players[3].chips).to eq 99
-      end
-      
-      it "makes player 3 the winner of the deal" do
-        expect(@game.players.index @winner).to eq 2
+      describe "player 4" do
+        it "has 99 chips" do
+          expect(@game.players[3].chips).to eq 99
+        end
       end
       
       it "had 18 chips in the pot" do
         expect(@pot).to eq 18
-      end
-      
-      it "gives the pot to player 3" do
-        expect(@game.players[2].chips).to eq 112
-      end
-      
-      it "has no winner" do
-        expect(@game.winner).to be_nil
       end
     end
     
@@ -108,38 +112,42 @@ describe DerpGame do
         @game.play_deal
       end
       
-      it "removes all cards from each player" do
-        @game.players.each do |player|
-          expect(player.cards.empty?).to be_true
+      it_behaves_like "an active game after a deal" do
+        let(:game) {@game}
+      end
+      
+      describe "player 1" do
+        it "has 93 chips" do
+          expect(@game.players[0].chips).to eq 93
         end
       end
       
-      it "takes 7 chips from player 1" do
-        expect(@game.players[0].chips).to eq 93
+      describe "player 2" do
+        it "has 91 chips" do
+          expect(@game.players[1].chips).to eq 91
+        end
       end
       
-      it "takes 9 chips from player 2" do
-        expect(@game.players[1].chips).to eq 91
+      describe "player 3" do
+        subject {@game.players[2]}
+        
+        it "has 122 chips" do
+          expect(subject.chips).to eq 122
+        end
+        
+        it "wins the last deal" do
+          expect(subject).to eq @winner
+        end
       end
       
-      it "takes 6 chips from player 4" do
-        expect(@game.players[3].chips).to eq 94
+      describe "player 4" do
+        it "has 94 chips" do
+          expect(@game.players[3].chips).to eq 94
+        end
       end
       
-      it "makes player 3 the winner of the deals" do
-        expect(@game.players.index @winner).to eq 2
-      end
-      
-      it "had 14 chips in the pot" do
+      it "had 14 chips in the last pot" do
         expect(@pot).to eq 14
-      end
-      
-      it "gives the pot to player 3" do
-        expect(@game.players[2].chips).to eq 122
-      end
-      
-      it "has no winner" do
-        expect(@game.winner).to be_nil
       end
     end
   end

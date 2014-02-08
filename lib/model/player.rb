@@ -1,9 +1,11 @@
 class Player
   attr_reader :chips, :cards
+  attr_accessor :name
   
   def initialize(chips=0)
     @chips = chips
     @cards = []
+    @name = "Player"
   end
   
   def bet(chips)
@@ -39,9 +41,8 @@ class Player
   end
   
   def best_hand
-    sorted_hand_classes.each do |hand_class|
-      hand = hand_class.generate(cards)
-      return hand if hand != nil
+    sorted_hand_classes.inject(nil) do |memo, hand_class|
+      memo || hand_class.generate(cards)
     end
   end
   
@@ -53,6 +54,5 @@ class Player
        HighCard.new, OnePair.new, Straight.new,
        StraightFlush.new, ThreeOfAKind.new,
        TwoPair.new].sort{|a, b| b <=> a}.map{|hand| hand.class}
-    @sorted_hand_classes
   end
 end

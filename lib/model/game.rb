@@ -13,8 +13,15 @@ class Game
     @players = []
     @min_bet = 0
     
+    index = 0
+    names = ["Bruce", "Dad", "Loser 1", "Loser 2", "Buttface", "Facebutt"]
+    
     number_of_players.times do
-      @players << Player.new(chips_per_player)
+      player = Player.new(chips_per_player)
+      player.name = names[index % number_of_players]
+      @players << player
+      
+      index += 1
     end
     
     @active_players = @players.dup

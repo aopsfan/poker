@@ -1,6 +1,6 @@
 class Game
   attr_accessor :deck
-  attr_reader :players, :ante, :pot, :betting_players
+  attr_reader :players, :ante, :pot, :betting_players, :active_players
   protected :pot, :betting_players
   
   def ante=(ante)
@@ -17,6 +17,7 @@ class Game
       @players << Player.new(chips_per_player)
     end
     
+    @active_players = @players.dup
     reset
   end
   
@@ -25,7 +26,7 @@ class Game
   end
   
   def winner
-    nil
+    @active_players.count == 1 ? @active_players.first : nil
   end
     
   protected
@@ -35,7 +36,8 @@ class Game
   end
   
   def reset
-    @betting_players = @players.dup
+    @active_players.reject!{|player| player.chips == 0}
+    @betting_players = @active_players.dup
     @pot = 0
     
     @players.each do |player|

@@ -21,6 +21,8 @@ class FiveCardDraw < Game
           player.drop_card(card_array.first, card_array.last)
         end
         player.take_cards(@deck.deal(dropped_cards.length))
+        
+        execute(:did_replace_cards, player)
       end
     end
     

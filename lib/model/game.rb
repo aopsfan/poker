@@ -1,7 +1,7 @@
 class Game
   attr_accessor :deck
   attr_reader :players, :ante, :pot, :betting_players, :active_players
-  protected :pot, :betting_players
+  protected :pot
   
   def ante=(ante)
     @ante = ante

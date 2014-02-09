@@ -4,6 +4,7 @@ describe Player do
   
   before :each do
     @player = Player.new(100)
+    @player.name = "Bobby"
   end
   
   describe "#bet" do
@@ -149,6 +150,61 @@ describe Player do
       
       it "returns 3 cards" do
         expect(@cards.length).to eq 3
+      end
+    end
+  end
+  
+  describe "#clone" do
+    before :each do
+      @player.take_cards [Card.new(:ten, :spades), Card.new(:ten, :clubs),
+                          Card.new(:ace, :spades), Card.new(:ace, :clubs),
+                          Card.new(:ace, :hearts)]
+      @clone = @player.clone
+    end
+    
+    describe "clone" do
+      it "has 5 cards" do
+        expect(@clone.cards.count).to eq 5
+      end
+      
+      it "has the name 'Bobby'" do
+        expect(@clone.name).to eq "Bobby"
+      end
+      
+      it "has 100 chips" do
+        expect(@clone.chips).to eq 100
+      end
+      
+      describe "best hand" do
+        it "is a full house" do
+          expect(@clone.best_hand).to be_a FullHouse
+        end
+      end
+      
+      context "when original player drops all cards" do
+        before :each do
+          @player.drop_all
+        end
+        
+        it "still has 5 cards" do
+          expect(@clone.cards.count).to eq 5
+        end
+        
+        describe "best hand" do
+          it "is still a full house" do
+            expect(@clone.best_hand).to be_a FullHouse
+          end
+        end
+      end
+      
+      context "when original player bets" do
+        before :each do
+          @player.bet(5)
+        end
+        
+        it "still has 100 chips" do
+          expect(@clone.chips).to eq 100
+        end
       end
     end
   end

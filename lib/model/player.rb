@@ -17,10 +17,12 @@ class Player
   end
   
   def take_cards(cards)
+    @best_hand = nil
     @cards += cards
   end
   
   def drop_card(rank, suit)
+    @best_hand = nil
     dropped_card = nil
     @cards.reject! do |card|
       if card.rank == rank && card.suit == suit
@@ -35,13 +37,14 @@ class Player
   end
   
   def drop_all
+    @best_hand = nil
     dropped_cards = @cards
     @cards = []
     dropped_cards
   end
   
   def best_hand
-    sorted_hand_classes.inject(nil) do |memo, hand_class|
+    @best_hand ||= sorted_hand_classes.inject(nil) do |memo, hand_class|
       memo || hand_class.generate(cards)
     end
   end
@@ -49,10 +52,10 @@ class Player
   private
   
   def sorted_hand_classes
-    @sorted_hand_classes ||=
-      [Flush.new, FourOfAKind.new, FullHouse.new,
-       HighCard.new, OnePair.new, Straight.new,
-       StraightFlush.new, ThreeOfAKind.new,
-       TwoPair.new].sort{|a, b| b <=> a}.map{|hand| hand.class}
+    [
+      StraightFlush, FourOfAKind, FullHouse,
+      Flush, Straight, ThreeOfAKind,
+      TwoPair, OnePair, HighCard
+    ]
   end
 end

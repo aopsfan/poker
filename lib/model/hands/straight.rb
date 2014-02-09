@@ -22,6 +22,7 @@ class Straight < Hand
       @straight_cards = sorted_cards
       @valid = true
     else
+      last_card.low_card = false # don't permanently mutate the cards array if the Straight isn't valid
       @valid = false
     end
   end

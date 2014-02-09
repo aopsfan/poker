@@ -19,11 +19,11 @@ class KeyValueView
   end
   
   def print
-    puts "\n==========\n#{@title}\n"
+    puts "\n==========\n#{@title}"
     @key_value_hash.each do |key, value|
       puts "#{key}: #{value}"
     end
-    puts "\n==========\n"
+    puts "==========\n\n"
   end
   
 end

@@ -11,7 +11,7 @@ class Card
   end
   
   def <=>(card)
-    @low_card ? -1 : value <=> card.value
+    value <=> card.value
   end
   
   def to_s

@@ -14,6 +14,7 @@ describe FiveCardDraw do
   
   before :each do
     @card_replacements = Hash.new
+    @did_replace_cards = false
     
     @deck = Deck.new default_deck
     @game = FiveCardDraw.new(4, 100)
@@ -22,6 +23,10 @@ describe FiveCardDraw do
     
     @game.register(:replace_cards) do |player|
       @card_replacements[@game.players.index(player)]
+    end
+    
+    @game.register(:did_replace_cards) do |player|
+      @did_replace_cards = true
     end
   end
   
@@ -42,6 +47,10 @@ describe FiveCardDraw do
         end
       end
       
+      it "has not replaced cards yet" do
+        expect(@did_replace_cards).to be_false
+      end
+
       it "has 4 chips in the pot" do
         expect(@deal[:pot]).to eq 4
       end
@@ -67,6 +76,10 @@ describe FiveCardDraw do
         end
       end
       
+      it "has not replaced cards yet" do
+        expect(@did_replace_cards).to be_false
+      end
+
       it "has 8 chips in the pot" do
         expect(@deal[:pot]).to eq 8
       end
@@ -110,6 +123,10 @@ describe FiveCardDraw do
 
         it_behaves_like "a 5-card game during a deal" do
           let(:game) {@game}
+        end
+        
+        it "has not replaced cards yet" do
+          expect(@did_replace_cards).to be_false
         end
 
         it "has 11 chips in the pot" do
@@ -158,6 +175,10 @@ describe FiveCardDraw do
         
         it_behaves_like "an active game after a deal" do
           let(:game) {@game}
+        end
+        
+        it "has replaced cards" do
+          expect(@did_replace_cards).to be_true
         end
         
         it "had 27 chips in the pot" do
@@ -230,6 +251,10 @@ describe FiveCardDraw do
           let(:game) {@game}
         end
         
+        it "has not replaced cards yet" do
+          expect(@did_replace_cards).to be_false
+        end
+
         it "has 11 chips in the pot" do
           expect(@deal[:pot]).to eq 11 # hahaha
         end
@@ -276,6 +301,10 @@ describe FiveCardDraw do
         
         it_behaves_like "an active game after a deal" do
           let(:game) {@game}
+        end
+        
+        it "has replaced cards" do
+          expect(@did_replace_cards).to be_true
         end
         
         it "had 27 chips in the pot" do
@@ -336,6 +365,10 @@ describe FiveCardDraw do
           let(:game) {@game}
         end
         
+        it "has not replaced cards yet" do
+          expect(@did_replace_cards).to be_false
+        end
+
         it "had 5 chips in the pot" do
           expect(@deal[:pot]).to eq 5
         end

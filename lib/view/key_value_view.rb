@@ -18,12 +18,13 @@ class KeyValueView
     end
   end
   
-  def print
-    puts "\n==========\n#{@title}"
-    @key_value_hash.each do |key, value|
-      puts "#{key}: #{value}"
+  def to_s
+    separator = "=========="
+    body = @key_value_hash.inject("") do |memo, array|
+      "#{memo}#{array[0]}: #{array[1]}\n"
     end
-    puts "==========\n\n"
+    
+    ["\n", separator, @title, body, separator, "\n"].join("\n")
   end
   
 end

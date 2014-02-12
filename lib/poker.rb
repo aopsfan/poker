@@ -23,6 +23,9 @@ require_relative "view/input_view.rb"
 require_relative "view/key_value_view.rb"
 require_relative "view/log_view.rb"
 
+require_relative "server/local_socket_client.rb"
+require_relative "server/local_socket_server.rb"
+
 module Poker
   # Your code goes here...
   def Poker.greet
@@ -30,7 +33,6 @@ module Poker
   end
 end
 
-Poker.greet
-
-controller = FiveCardDrawController.new(4, 50, 2)
+controller = FiveCardDrawController.new(2, 50, 1)
+controller.take_players
 controller.play

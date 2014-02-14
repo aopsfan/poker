@@ -402,6 +402,61 @@ describe FiveCardDraw do
             expect(subject).to eq @deal[:winner]
           end
         end
+        
+        context "after first round of next deal" do
+          before :each do
+            @bets = {
+              0 => :call,
+              1 => :call,
+              2 => :call,
+              3 => :call
+            }
+            @game.start_deal
+            @deal = @game.play_round_of_betting do |player, min_bet|
+              @bets[@game.players.index(player)]
+            end
+          end
+          
+          it_behaves_like "a 5-card game during a deal" do
+            let(:game) {@game}
+          end
+          
+          it "has not replaced cards yet" do
+            expect(@did_replace_cards).to be_false
+          end
+
+          it "has 8 chips in the pot" do
+            expect(@deal[:pot]).to eq 8
+          end
+
+          describe "player 1" do
+            it "has 97 chips" do
+              expect(@game.players[0].chips).to eq 97 # 100 - 1 - 1 - 1
+            end
+          end
+
+          describe "player 2" do
+            it "has 97 chips" do
+              expect(@game.players[1].chips).to eq 97 # 100 - 1 - 1 - 1
+            end
+          end
+
+          describe "player 3" do
+            it "has 97 chips" do
+              expect(@game.players[2].chips).to eq 97 # 100 - 1 - 1 - 1
+            end
+          end
+
+          describe "player 4" do
+            it "has 101 chips" do
+              expect(@game.players[3].chips).to eq 101 # 100 - 1 - 1 + 5 - 1 - 1
+            end
+          end
+
+          it "does not have a deal winner yet" do
+            expect(@deal[:winner]).to be_nil
+          end
+        end
       end
     end
   end

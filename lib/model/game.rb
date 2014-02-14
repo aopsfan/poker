@@ -14,7 +14,7 @@ class Game
     @min_bet = 0
     
     index = 0
-    names = ["Bruce", "Nick", "Loser 1", "Loser 2", "Buttface", "Facebutt"]
+    names = ["Bruce", "Eric", "Loser 1", "Loser 2", "Buttface", "Facebutt"]
     
     number_of_players.times do
       player = Player.new(chips_per_player)

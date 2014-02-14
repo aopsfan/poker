@@ -42,7 +42,7 @@ class FiveCardDraw < Game
       reset
     end
     
-    @final_round = !@final_round
+    @final_round = !round_over
     deal
   end
   

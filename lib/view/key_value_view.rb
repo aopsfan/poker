@@ -19,12 +19,9 @@ class KeyValueView
   end
   
   def to_s
-    separator = "=========="
-    body = @key_value_hash.inject("") do |memo, array|
-      "#{memo}#{array[0]}: #{array[1]}\n"
-    end
-    
-    ["\n", separator, @title, body, separator, "\n"].join("\n")
+    lines = @key_value_hash.collect {|key, value| "#{key}: #{value}"}
+    lines.unshift @title
+    lines.join "\n"
   end
   
 end

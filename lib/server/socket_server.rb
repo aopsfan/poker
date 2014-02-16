@@ -1,11 +1,9 @@
 require 'socket'
 
-class LocalSocketServer < TCPServer
-  
-  attr_accessor :puts_prefix, :print_suffix
+class SocketServer < TCPServer
   
   def initialize(number_of_sockets, game)
-    super(LocalSocketClient.port(game))
+    super(SocketClient.port(game))
     @number_of_sockets = number_of_sockets
     @socket_clients = Array.new
   end
@@ -17,14 +15,14 @@ class LocalSocketServer < TCPServer
     end
   end
   
-  def puts(client_index=nil, message)
-    client_audience(client_index).each {|client| client.puts @puts_prefix + message}
-  end
-  
   def print(client_index=nil, message)
-    client_audience(client_index).each {|client| client.print message + @print_suffix}
+    client_audience(client_index).each {|client| client.print message}
   end
   
+  def puts(client_index=nil, message)
+    client_audience(client_index).each {|client| client.puts message}
+  end
+    
   def gets(client_index)
     @socket_clients[client_index].gets
   end

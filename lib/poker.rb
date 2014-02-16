@@ -19,12 +19,11 @@ require_relative "model/hands/straight_flush.rb"
 
 require_relative "controller/five_card_draw_controller.rb"
 
-require_relative "view/input_view.rb"
 require_relative "view/key_value_view.rb"
-require_relative "view/log_view.rb"
 
-require_relative "server/local_socket_client.rb"
-require_relative "server/local_socket_server.rb"
+require_relative "server/socket_client.rb"
+require_relative "server/socket_server.rb"
+require_relative "server/broadcast.rb"
 
 module Poker
   # Your code goes here...

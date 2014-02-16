@@ -1,8 +1,8 @@
 require 'socket'
 
-module LocalSocketClient
+module SocketClient
   
-  GAME_PORTS = {:poker => 3333}
+  GAME_PORTS = {poker: 3333}
   
   def self.port(game)
     GAME_PORTS[game]
@@ -25,5 +25,5 @@ module LocalSocketClient
 end
 
 if __FILE__ == $0
-  LocalSocketClient.join(:poker)
+  SocketClient.join(:poker)
 end

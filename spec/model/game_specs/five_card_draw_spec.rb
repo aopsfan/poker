@@ -15,18 +15,28 @@ describe FiveCardDraw do
   before :each do
     @card_replacements = Hash.new
     @did_replace_cards = false
+    @did_bet = false
+    @did_fold
     
     @deck = Deck.new default_deck
     @game = FiveCardDraw.new(4, 100)
     @game.deck = @deck
     @game.ante = 1
     
-    @game.register(:replace_cards) do |player|
+    @game.register(:card_replacements) do |player|
       @card_replacements[@game.players.index(player)]
     end
     
     @game.register(:did_replace_cards) do |player|
       @did_replace_cards = true
+    end
+    
+    @game.register(:did_bet) do |player, bet|
+      @did_bet = true
+    end
+    
+    @game.register(:did_fold) do |player|
+      @did_fold = true
     end
   end
   
@@ -49,6 +59,14 @@ describe FiveCardDraw do
       
       it "has not replaced cards yet" do
         expect(@did_replace_cards).to be_false
+      end
+      
+      it "has not taken bets" do
+        expect(@did_bet).to be_false
+      end
+      
+      it "has no folded players" do
+        expect(@did_fold).to be_false
       end
 
       it "has 4 chips in the pot" do
@@ -78,6 +96,14 @@ describe FiveCardDraw do
       
       it "has not replaced cards yet" do
         expect(@did_replace_cards).to be_false
+      end
+
+      it "has not taken bets" do
+        expect(@did_bet).to be_false
+      end
+      
+      it "has no folded players" do
+        expect(@did_fold).to be_false
       end
 
       it "has 8 chips in the pot" do
@@ -127,6 +153,14 @@ describe FiveCardDraw do
         
         it "has not replaced cards yet" do
           expect(@did_replace_cards).to be_false
+        end
+
+        it "has taken bets" do
+          expect(@did_bet).to be_true
+        end
+
+        it "has folded players" do
+          expect(@did_fold).to be_true
         end
 
         it "has 11 chips in the pot" do
@@ -179,6 +213,14 @@ describe FiveCardDraw do
         
         it "has replaced cards" do
           expect(@did_replace_cards).to be_true
+        end
+        
+        it "has taken bets" do
+          expect(@did_bet).to be_true
+        end
+
+        it "has folded players" do
+          expect(@did_fold).to be_true
         end
         
         it "had 27 chips in the pot" do
@@ -255,6 +297,14 @@ describe FiveCardDraw do
           expect(@did_replace_cards).to be_false
         end
 
+        it "has taken bets" do
+          expect(@did_bet).to be_true
+        end
+
+        it "has folded players" do
+          expect(@did_fold).to be_true
+        end
+
         it "has 11 chips in the pot" do
           expect(@deal[:pot]).to eq 11 # hahaha
         end
@@ -305,6 +355,14 @@ describe FiveCardDraw do
         
         it "has replaced cards" do
           expect(@did_replace_cards).to be_true
+        end
+        
+        it "has taken bets" do
+          expect(@did_bet).to be_true
+        end
+
+        it "has folded players" do
+          expect(@did_fold).to be_true
         end
         
         it "had 27 chips in the pot" do
@@ -368,6 +426,14 @@ describe FiveCardDraw do
         it "has not replaced cards yet" do
           expect(@did_replace_cards).to be_false
         end
+        
+        it "has taken bets" do
+          expect(@did_bet).to be_true
+        end
+
+        it "has folded players" do
+          expect(@did_fold).to be_true
+        end
 
         it "had 5 chips in the pot" do
           expect(@deal[:pot]).to eq 5
@@ -423,6 +489,14 @@ describe FiveCardDraw do
           
           it "has not replaced cards yet" do
             expect(@did_replace_cards).to be_false
+          end
+          
+          it "has taken bets" do
+            expect(@did_bet).to be_true
+          end
+
+          it "has folded players" do
+            expect(@did_fold).to be_true
           end
 
           it "has 8 chips in the pot" do

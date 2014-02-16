@@ -19,8 +19,6 @@ class FiveCardDrawController
     @broadcast.take_players do |index|
       @broadcast.log "#{@game.players[index].name} joined the game."
     end
-    
-    Poker.greet
   end
   
   def play
@@ -34,6 +32,7 @@ class FiveCardDrawController
         @broadcast.log "We will now enter a round of betting."
         
         current_deal = @game.play_round_of_betting do |player, min_bet|
+          log_to_others(player, "It's #{player.name}'s turn to bet.")
           response = gets_from_player(player, "It's your turn to bet. Enter a number or \"call\" or \"fold\"").chomp
           response.to_i if Float(response) rescue response.to_sym
         end
@@ -54,7 +53,8 @@ class FiveCardDrawController
   end
   
   def register_callbacks
-    @game.register(:replace_cards) do |player|
+    @game.register(:card_replacements) do |player|
+      log_to_others(player, "It's #{player.name}'s turn to replace cards.")
       response = gets_from_player(player, "What cards would you like to replace?").chomp
       response.split(" ").map do |card_string|
         card = card_string.to_card
@@ -65,6 +65,19 @@ class FiveCardDrawController
     @game.register(:did_replace_cards) do |player|
       show_player_info(player)
     end
+    
+    @game.register(:did_bet) do |player, bet|
+      log_to_others(player, "#{player.name} betted #{bet}.")
+    end
+    
+    @game.register(:did_fold) do |player|
+      log_to_others(player, "#{player.name} folded.")
+    end
+  end
+  
+  def log_to_others(player, message)
+    other_player_indexes = @game.betting_players.reject{|p| p == player}.map{|p| @game.players.index(p)}
+    @broadcast.log(other_player_indexes, message)
   end
   
   def show_player_info(player)

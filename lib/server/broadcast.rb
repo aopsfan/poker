@@ -3,7 +3,7 @@ class Broadcast
   def initialize(number_of_players, game)
     @server = SocketServer.new(number_of_players, game)
     @number_of_players = number_of_players
-    @last_print_type = nil
+    @last_print_types = Hash.new
   end
   
   def take_players
@@ -12,31 +12,38 @@ class Broadcast
     end
   end
   
-  def log(player_index=nil, message)
-    delimit(player_index) unless @last_print_type == :log
-    @server.puts(player_index, "> #{message}")
-    @last_print_type = :log
+  def log(player_scope=nil, message)
+    delimit(player_scope, :log) do |client|
+      client.puts("> #{message}")
+    end
   end
   
-  def print_block(player_index=nil, message)
-    delimit(player_index)
-    separator = "=========="
-    @server.puts(player_index, "#{separator}\n#{message}\n#{separator}")
-    @last_print_type = :print_block
+  def print_block(player_scope=nil, message)
+    delimit(player_scope, :print_block) do |client|
+      separator = "=========="
+      client.puts("#{separator}\n#{message}\n#{separator}")
+    end
   end
   
-  def ask(player_index, prompt)
-    delimit(player_index)
-    @server.puts(player_index, prompt)
-    @last_print_type = :ask
+  def ask(player_scope, prompt)
+    delimit(player_scope, :ask) do |client|
+      client.puts(prompt)    
+    end
     
-    @server.gets(player_index)
+    @server.gets(player_scope)
   end
   
   private
   
-  def delimit(player_index=nil)
-    @server.print(player_index, "\n") unless @last_print_type.nil?
+  def delimit(player_scope, print_type)
+    @server.iterate_clients(player_scope) do |client|
+      nil_condition = @last_print_types[client].nil?
+      log_condition = print_type == :log && @last_print_types[client] == :log
+      
+      client.print("\n") unless nil_condition || log_condition
+      yield(client)
+      @last_print_types[client] = print_type
+    end
   end
   
 end

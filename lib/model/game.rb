@@ -39,7 +39,7 @@ class Game
   protected
   
   def execute(sym, *args)
-    @action_to_block_map[sym].call(*args)
+    @action_to_block_map[sym].call(*args) if @action_to_block_map[sym]
   end
   
   def reset
@@ -74,13 +74,13 @@ class Game
       
       if bet == :fold
         folding_players << player
-      elsif bet == :call
-        player.bet(@min_bet)
-        @pot += @min_bet
+        execute(:did_fold, player)
       else
-        player.bet(bet)
-        @min_bet = bet
-        @pot += bet
+        bet_value = bet == :call ? @min_bet : bet
+        player.bet(bet_value)
+        @min_bet = bet_value
+        @pot += bet_value
+        execute(:did_bet, player, bet_value)
       end
     end
     

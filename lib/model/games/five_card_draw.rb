@@ -15,7 +15,7 @@ class FiveCardDraw < Game
     if @final_round
       # request cards
       betting_players.each do |player|
-        dropped_cards = execute(:replace_cards, player)
+        dropped_cards = execute(:card_replacements, player)
         
         dropped_cards.each do |card_array|
           player.drop_card(card_array.first, card_array.last)

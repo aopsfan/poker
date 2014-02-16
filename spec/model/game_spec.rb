@@ -74,6 +74,11 @@ describe DerpGame do
       @winner = winner
       @pot = pot
     end
+    
+    @did_bet = false
+    @did_fold = false
+    @game.register(:did_bet) {|player, bet| @did_bet = true}
+    @game.register(:did_fold) {|player| @did_fold = true}
   end
   
   describe "#play_deal" do
@@ -128,6 +133,14 @@ describe DerpGame do
       
       it "had 18 chips in the pot" do
         expect(@pot).to eq 18
+      end
+      
+      it "has taken bets" do
+        expect(@did_bet).to be_true
+      end
+
+      it "has folded players" do
+        expect(@did_fold).to be_true
       end
     end
     
@@ -189,6 +202,14 @@ describe DerpGame do
       
       it "had 14 chips in the last pot" do
         expect(@pot).to eq 14
+      end
+      
+      it "has taken bets" do
+        expect(@did_bet).to be_true
+      end
+
+      it "has folded players" do
+        expect(@did_fold).to be_true
       end
     end
 
@@ -257,6 +278,14 @@ describe DerpGame do
       
       it "had 230 chips in the pot" do
         expect(@pot).to eq 230
+      end
+      
+      it "has taken bets" do
+        expect(@did_bet).to be_true
+      end
+
+      it "has no folded players" do
+        expect(@did_fold).to be_false
       end
     end
 
@@ -335,6 +364,14 @@ describe DerpGame do
       it "had 20 chips in the last pot" do
         expect(@pot).to eq 20
       end
+      
+      it "has taken bets" do
+        expect(@did_bet).to be_true
+      end
+
+      it "has folded players" do
+        expect(@did_fold).to be_true
+      end
     end
     
     context "after eliminating all but player 4" do
@@ -369,6 +406,14 @@ describe DerpGame do
         it "has 400 chips" do
           expect(@game.players[2].chips).to eq 400
         end
+      end
+      
+      it "has taken bets" do
+        expect(@did_bet).to be_true
+      end
+
+      it "has no folded players" do
+        expect(@did_fold).to be_false
       end
     end
   end
